@@ -77,12 +77,12 @@ class Ball {
         }
     }
 
-    start() {
+    start(speed) {
         if (this.vx !== 0 || this.vy !== 0) {
             return;
         }
 
-        this.vx = 1.4142;
-        this.vy = 1.4142;
+        this.vx = speed / 1.4142;
+        this.vy = speed / 1.4142;
     }
 }

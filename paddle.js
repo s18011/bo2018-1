@@ -1,5 +1,5 @@
 class Paddle {
-    constructor (x, y, width, height, color) {
+    constructor(x, y, width, height, color) {
         this.x = x;
         this.y = y;
         this.half_width = width / 2;
@@ -7,7 +7,7 @@ class Paddle {
         this.color = color;
     }
 
-    draw (ctx) {
+    draw(ctx) {
         ctx.save();
 
         ctx.translate(this.x, this.y);
@@ -26,7 +26,7 @@ class Paddle {
         ctx.restore();
     }
 
-    move (dx) {
+    move(dx) {
         this.x += dx;
 
         // 画面左を超えないように
@@ -39,6 +39,31 @@ class Paddle {
         const right = this.x + this.half_width;
         if (right > WINDOW_WIDTH) {
             this.x -= right - WINDOW_WIDTH
+        }
+    }
+
+    collide(ball) {
+        const top = this.y - this.half_height;
+        const bottom = this.y + this.half_height;
+        // ボールがパドルより上か下にある場合、何もしない
+        if (top > ball.bottom || bottom < ball.top) {
+            return;
+        }
+
+        const left = this.x - this.half_width;
+        const right = this.x + this.half_width;
+
+        if (left < ball.right && right > ball.left) {
+            if (ball.rightBottom.x < left && ball.rightBottom.y > top) {
+                // パドルの左角より下側であたったら上に戻さない
+                ball.reboundHorizontal(left - ball.right);
+            } else if (ball.leftBottom.x > right && ball.leftBottom.y > top) {
+                // パドルの右角より下側であたったら上に戻さない
+                ball.reboundHorizontal(ball.left - right);
+            } else {
+                // 通常通り上に跳ね返す
+                ball.reboundVertical(ball.bottom - top);
+            }
         }
     }
 }

@@ -24,9 +24,11 @@ function game_tick () {
     }
 
 
-    // 各種オブジェクトの移動
+    // ボールの移動
     ball.move();
 
+    // ボールとパドルの当たり判定
+    paddle.collide(ball);
 
     // 各種オブジェクトの描画
     ctx.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);

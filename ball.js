@@ -3,6 +3,36 @@ class Ball {
         return 6.283185307179586;
     }
 
+    get top() {
+        return this.y - this.radius;
+    }
+
+    get bottom() {
+        return this.y + this.radius;
+    }
+
+    get left() {
+        return this.x - this.radius;
+    }
+
+    get right() {
+        return this.x + this.radius;
+    }
+
+    get rightBottom() {
+        return {
+            x: this.x + this.collisionPoint[0].x,
+            y: this.y + this.collisionPoint[0].y
+        }
+    }
+
+    get leftBottom() {
+        return {
+            x: this.x + this.collisionPoint[1].x,
+            y: this.y + this.collisionPoint[1].y
+        }
+    }
+
     constructor(x, y, radius, color) {
         this.x = x;
         this.y = y;
@@ -11,18 +41,8 @@ class Ball {
         this.vy = 0;
         this.color = color;
         this.collisionPoint = [
-            {x: radius, y: 0},  // 0
-            {x: 0.866 * radius, y: 0.5 * radius},  // 30
-            {x: 0.5 * radius, y: 0.866 * radius},  // 60
-            {x: 0, y: radius},  // 90
-            {x: -0.5 * radius, y: 0.866 * radius},  // 120
-            {x: -0.866 * radius, y: 0.5 * radius},  // 150
-            {x: -radius, y: 0},  // 180
-            {x: -0.866 * radius, y: -0.5 * radius},  // 210
-            {x: -0.5 * radius, y: -0.866 * radius},  // 240
-            {x: 0, y: -radius},  // 270
-            {x: 0.5 * radius, y: -0.866 * radius},  // 300
-            {x: 0.866 * radius, y: -0.5 * radius}  // 330
+            {x: 0.7071 * radius, y: 0.7071 * radius},  // 45
+            {x: -0.7071 * radius, y: 0.7071 * radius},  // 135
         ]
     }
 
@@ -51,15 +71,10 @@ class Ball {
         return flag;
     }
 
-    move () {
+    move() {
         this.x += this.vx;
         this.y += this.vy;
 
-        // 下の壁の跳ね返りチェック (あとから削除)
-        if (this.y + this.radius > WINDOW_HEIGHT) {
-            this.y -= (this.y + this.radius) - WINDOW_HEIGHT;
-            this.vy = -this.vy;
-        }
         // 右の壁の跳ね返りチェック
         if (this.x + this.radius > WINDOW_WIDTH) {
             this.x -= (this.x + this.radius) - WINDOW_WIDTH;
@@ -84,5 +99,15 @@ class Ball {
 
         this.vx = speed / 1.4142;
         this.vy = speed / 1.4142;
+    }
+
+    reboundVertical(dy) {
+        this.y -= dy;
+        this.vy = -this.vy;
+    }
+
+    reboundHorizontal(dx) {
+        this.x -= dx;
+        this.vx = -this.vx;
     }
 }

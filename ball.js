@@ -50,4 +50,39 @@ class Ball {
         });
         return flag;
     }
+
+    move () {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // 下の壁の跳ね返りチェック (あとから削除)
+        if (this.y + this.radius > WINDOW_HEIGHT) {
+            this.y -= (this.y + this.radius) - WINDOW_HEIGHT;
+            this.vy = -this.vy;
+        }
+        // 右の壁の跳ね返りチェック
+        if (this.x + this.radius > WINDOW_WIDTH) {
+            this.x -= (this.x + this.radius) - WINDOW_WIDTH;
+            this.vx = -this.vx;
+        }
+        // 上の壁の跳ね返りチェック
+        if (this.y - this.radius < 0) {
+            this.y -= this.y - this.radius;
+            this.vy = -this.vy;
+        }
+        // 左の壁の跳ね返りチェック
+        if (this.x - this.radius < 0) {
+            this.x -= this.x - this.radius;
+            this.vx = -this.vx;
+        }
+    }
+
+    start() {
+        if (this.vx !== 0 || this.vy !== 0) {
+            return;
+        }
+
+        this.vx = 1.4142;
+        this.vy = 1.4142;
+    }
 }

@@ -27,11 +27,12 @@ class Block {
     }
 
     collide(ball) {
+        let result = true;
         const top = this.y - this.half_height;
         const bottom = this.y + this.half_height;
         // ボールがブロックより上か下にある場合、何もしない
         if (top > ball.bottom || bottom < ball.top) {
-            return;
+            return false;
         }
 
         const left = this.x - this.half_width;
@@ -61,6 +62,10 @@ class Block {
                 // ブロックの下に当たった
                 ball.reboundVertical(ball.top - bottom);
             }
+        } else {
+            result = false;
         }
+
+        return result;
     }
 }

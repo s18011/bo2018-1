@@ -12,7 +12,7 @@ const ball = new Ball(400, 300, 10, 'red');
 const paddle = new Paddle(400, 550, 80, 10, 'deepskyblue');
 const blocks = [];
 
-blocks.push(new Block(400, 40, BLOCK_WIDTH, BLOCK_HEIGHT, "lime"));
+blocks.push(new Block(400, 50, BLOCK_WIDTH, BLOCK_HEIGHT, "lime"));
 
 window.setInterval(game_tick, SPF);
 
@@ -46,5 +46,7 @@ function game_tick() {
 
 function blocks_collide() {
     // 動作確認用のサンプルコード
-    blocks[0].collide(ball);
+    if (blocks[0] && blocks[0].collide(ball)) {
+        blocks.splice(0, 1);
+    }
 }

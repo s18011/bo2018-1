@@ -4,14 +4,19 @@ const WINDOW_WIDTH = canvas.width;
 const WINDOW_HEIGHT = canvas.height;
 const SPF = 1000 / 60;
 const PADDLE_SPEED = 5;
+const BLOCK_WIDTH = 50;
+const BLOCK_HEIGHT = 20;
 
 const input = new Input();
 const ball = new Ball(400, 300, 10, 'red');
 const paddle = new Paddle(400, 550, 80, 10, 'deepskyblue');
+const blocks = [];
+
+blocks.push(new Block(400, 40, BLOCK_WIDTH, BLOCK_HEIGHT, "lime"));
 
 window.setInterval(game_tick, SPF);
 
-function game_tick () {
+function game_tick() {
     // 入力状況に応じた呼び出し
     if (input.space) {
         ball.start(5);
@@ -27,11 +32,19 @@ function game_tick () {
     // ボールの移動
     ball.move();
 
-    // ボールとパドルの当たり判定
+    // ボールとブロックの当たり判定
     paddle.collide(ball);
+    // ボールとブロックの当たり判定
+    blocks_collide();
 
     // 各種オブジェクトの描画
     ctx.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     paddle.draw(ctx);
     ball.draw(ctx);
+    blocks.forEach((block) => block.draw(ctx));
+}
+
+function blocks_collide() {
+    // 動作確認用のサンプルコード
+    blocks[0].collide(ball);
 }

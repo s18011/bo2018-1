@@ -1,4 +1,4 @@
-class Paddle {
+class Block {
     constructor(x, y, width, height, color) {
         this.x = x;
         this.y = y;
@@ -26,22 +26,6 @@ class Paddle {
         ctx.restore();
     }
 
-    move(dx) {
-        this.x += dx;
-
-        // 画面左を超えないように
-        const left = this.x - this.half_width;
-        if (left < 0) {
-            this.x -= left;
-        }
-
-        // 画面右を超えないように
-        const right = this.x + this.half_width;
-        if (right > WINDOW_WIDTH) {
-            this.x -= right - WINDOW_WIDTH
-        }
-    }
-
     collide(ball) {
         const top = this.y - this.half_height;
         const bottom = this.y + this.half_height;
@@ -54,15 +38,28 @@ class Paddle {
         const right = this.x + this.half_width;
 
         if (left < ball.right && right > ball.left) {
-            if (ball.rightBottom.x < left && ball.rightBottom.y > top) {
-                // ブロックの左角より下側であたったら上に戻さない
+            if (ball.rightBottom.x < left && ball.rightBottom.y > top
+                && ball.rightBottom.y < bottom) {
+                // ブロックの左上角より下側であたったら上に戻さない
                 ball.reboundHorizontal(left - ball.right);
-            } else if (ball.leftBottom.x > right && ball.leftBottom.y > top) {
-                // ブロックの右角より下側であたったら上に戻さない
+            } else if (ball.leftBottom.x > right && ball.leftBottom.y > top
+                && ball.leftBottom.y < bottom) {
+                // ブロックの右上角より下側であたったら上に戻さない
                 ball.reboundHorizontal(ball.left - right);
-            } else {
-                // 通常通り上に跳ね返す
+            } else if (ball.rightTop.x < left && ball.rightTop.y < bottom
+                && ball.rightTop.y > top) {
+                // ブロックの左下角より上側であたったら下に戻さない
+                ball.reboundHorizontal(left - ball.right);
+            } else if (ball.leftTop.x > right && ball.leftTop.y < bottom
+                && ball.leftTop.y > top) {
+                // ブロックの右下角より上側であたったら下に戻さない
+                ball.reboundHorizontal(ball.left - right);
+            } else if (ball.bottom > top && ball.top < top) {
+                // ブロックの上にあたった
                 ball.reboundVertical(ball.bottom - top);
+            } else {
+                // ブロックの下に当たった
+                ball.reboundVertical(ball.top - bottom);
             }
         }
     }

@@ -33,6 +33,20 @@ class Ball {
         }
     }
 
+    get leftTop() {
+        return {
+            x: this.x + this.collisionPoint[2].x,
+            y: this.y + this.collisionPoint[2].y
+        }
+    }
+
+    get rightTop() {
+        return {
+            x: this.x + this.collisionPoint[3].x,
+            y: this.y + this.collisionPoint[3].y
+        }
+    }
+
     constructor(x, y, radius, color) {
         this.x = x;
         this.y = y;
@@ -43,6 +57,8 @@ class Ball {
         this.collisionPoint = [
             {x: 0.7071 * radius, y: 0.7071 * radius},  // 45
             {x: -0.7071 * radius, y: 0.7071 * radius},  // 135
+            {x: -0.7071 & radius, y: -0.7071 * radius},  // 225
+            {x: 0.7071 * radius, y: -0.7071 * radius}  // 315
         ]
     }
 
